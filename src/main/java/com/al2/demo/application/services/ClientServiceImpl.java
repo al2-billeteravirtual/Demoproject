@@ -1,5 +1,6 @@
 package com.al2.demo.application.services;
 
+import com.al2.demo.application.interfaces.ClientService;
 import com.al2.demo.domain.model.DomainClient;
 import com.al2.demo.infrastructure.db.port.ClientEntityRepository;
 import com.al2.demo.infrastructure.api.adapters.ClientDTO;
@@ -9,27 +10,25 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ClientServiceImpl {
+public class ClientServiceImpl implements ClientService {
 
     private final ClientEntityRepository clientEntityRepository;
-    private final ObjectMapper mapper;
 
-    public ClientServiceImpl(ClientEntityRepository clientEntityRepository, ObjectMapper mapper) {
+    public ClientServiceImpl(ClientEntityRepository clientEntityRepository) {
         this.clientEntityRepository = clientEntityRepository;
-        this.mapper = mapper;
     }
 
 
-    public List<ClientDTO> getAllUsers(){
-        return clientEntityRepository.getAllUsers().stream().map(obj -> mapper.convertValue(obj, ClientDTO.class)).toList();
+    public List<DomainClient> getAllUsers(){
+        return clientEntityRepository.getAllUsers();
     }
 
-    public ClientDTO getUserByUsername(String username){
-        return mapper.convertValue(clientEntityRepository.getUserByUsername(username), ClientDTO.class);
+    public DomainClient getUserByUsername(String username){
+        return clientEntityRepository.getUserByUsername(username);
     }
 
-    public ClientDTO createUser(ClientDTO clientDTO) {
-        clientEntityRepository.saveClient(mapper.convertValue(clientDTO, DomainClient.class));
-        return clientDTO;
+    public DomainClient createUser(DomainClient client) {
+        clientEntityRepository.saveClient(client);
+        return client;
     }
 }

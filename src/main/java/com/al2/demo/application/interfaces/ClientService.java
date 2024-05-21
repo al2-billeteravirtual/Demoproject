@@ -1,13 +1,14 @@
 package com.al2.demo.application.interfaces;
 
+import com.al2.demo.domain.model.DomainClient;
 import com.al2.demo.infrastructure.api.adapters.ClientDTO;
 
 import java.util.List;
 
 public interface ClientService {
-    List<ClientDTO> getAllUsers();
+    List<DomainClient> getAllUsers();
 
-    ClientDTO getUserByUsername(String username);
+    DomainClient getUserByUsername(String username);
 
-    ClientDTO createUser(ClientDTO clientDTO);
+    DomainClient createUser(DomainClient clientDTO);
 }
