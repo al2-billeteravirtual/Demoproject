@@ -1,4 +1,4 @@
-package com.al2.demo;
+package com.al2.demo.infrastructure.api.adapters;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
