@@ -1,0 +1,32 @@
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  # Variables para Azure Container Registry
+  acrName: 'fersi'
+  acrLoginServer: 'fersi.azurecr.io'
+
+stages:
+  - stage: Dockerize
+    jobs:
+      - job: Dockerize
+        steps:
+          - task: Docker@2
+            inputs:
+              command: 'build'
+              repository: '$(acrLoginServer)/springboot'
+              dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+              tags: |
+                $(Build.BuildId)
+
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: 'AL2AcrGruops'  # Nombre de la conexión de servicio
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az acr login --name $(acrName)
+                docker push $(acrLoginServer)/springboot:$(Build.BuildId)
